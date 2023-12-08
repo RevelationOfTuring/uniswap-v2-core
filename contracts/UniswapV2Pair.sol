@@ -135,7 +135,7 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
 
     // if fee is on, mint liquidity equivalent to 1/6th of the growth in sqrt(k)
     //
-    // 如果收取平台收费，那么mint给平台的流动性为sqrt(k)增量比重的1/6，返回值为是否开启平台收费
+    // 如果收取平台收费，那么mint给平台的流动性为sqrt(k)增量的1/6，返回值为是否开启平台收费
     // 注：每一笔swap交易都会有千分之三的手续费，那么k值也会随着缓慢增加
     function _mintFee(uint112 _reserve0, uint112 _reserve1) private returns (bool feeOn) {
         // 从factory合约中获取fee的收款人地址
@@ -309,7 +309,7 @@ contract UniswapV2Pair is IUniswapV2Pair, UniswapV2ERC20 {
             //      (1000*balance0 - 3*amount0In)*(1000*balance1 - 3*amount1In) >= _reserve0*_reserve1*1000*1000
             // ->   (balance0 - 0.003*amount0In)*(balance1 - 0.003*amount1In) >= _reserve0*_reserve1
             // 其中：0.003*amount0In或0.003*amount1In就是所谓的“千3”的交易手续费
-            require(balance0Adjusted.mul(balance1Adjusted) >= uint(_reserve0).mul(_reserve0).mul(1000 ** 2), 'UniswapV2: K');
+            require(balance0Adjusted.mul(balance1Adjusted) >= uint(_reserve0).mul(_reserve1).mul(1000**2), 'UniswapV2: K');
         }
 
         // 全局变量reserve0和reserve1对其balance0和balance1
